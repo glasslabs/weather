@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"html/template"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
 	"path/filepath"
 	"time"
 
@@ -53,7 +53,7 @@ type Module struct {
 
 // New returns a running clock module.
 func New(_ context.Context, cfg *Config, info types.Info, ui types.UI) (io.Closer, error) {
-	html, err := ioutil.ReadFile(filepath.Join(info.Path, "assets/index.html"))
+	html, err := os.ReadFile(filepath.Clean(filepath.Join(info.Path, "assets/index.html")))
 	if err != nil {
 		return nil, fmt.Errorf("weather: could not read html: %w", err)
 	}
@@ -72,13 +72,13 @@ func New(_ context.Context, cfg *Config, info types.Info, ui types.UI) (io.Close
 		done: make(chan struct{}),
 	}
 
-	if err := m.loadCSS("assets/wu-icons-style.css"); err != nil {
+	if err = m.loadCSS("assets/wu-icons-style.css"); err != nil {
 		return nil, err
 	}
-	if err := m.loadCSS("assets/style.css"); err != nil {
+	if err = m.loadCSS("assets/style.css"); err != nil {
 		return nil, err
 	}
-	if err := m.render(data{}); err != nil {
+	if err = m.render(data{}); err != nil {
 		return nil, err
 	}
 
@@ -96,30 +96,30 @@ func (m *Module) run() {
 	for {
 		m.log.Info("fetching weather data", "module", "weather", "id", m.name)
 
-		data := data{}
-		if err := m.request(c, apiCurrentPath, url.Values{}, &data.Current); err != nil {
+		d := data{}
+		if err := m.request(c, apiCurrentPath, url.Values{}, &d.Current); err != nil {
 			m.log.Error("could not get current weather data", "module", "weather", "id", m.name, "error", err.Error())
 		}
-		if err := m.request(c, apiForecastPath, url.Values{"cnt": []string{"4"}}, &data.Forecast); err != nil {
+		if err := m.request(c, apiForecastPath, url.Values{"cnt": []string{"4"}}, &d.Forecast); err != nil {
 			m.log.Error("could not get current weather data", "module", "weather", "id", m.name, "error", err.Error())
 		}
 
-		if len(data.Forecast.List) > 1 {
-			data.Current.Day = data.Forecast.List[0]
-			data.Forecast.List = data.Forecast.List[1:]
+		if len(d.Forecast.List) > 1 {
+			d.Current.Day = d.Forecast.List[0]
+			d.Forecast.List = d.Forecast.List[1:]
 		}
-		data.Current.Icon = data.Current.Weather.Icon()
-		for i := range data.Forecast.List {
-			day := data.Forecast.List[i]
+		d.Current.Icon = d.Current.Weather.Icon()
+		for i := range d.Forecast.List {
+			dy := d.Forecast.List[i]
 
-			t := time.Unix(day.Unix, 0)
-			day.Day = t.Format("Monday")
-			day.Icon = day.Weather.Icon()
+			t := time.Unix(dy.Unix, 0)
+			dy.Day = t.Format("Monday")
+			dy.Icon = dy.Weather.Icon()
 
-			data.Forecast.List[i] = day
+			d.Forecast.List[i] = dy
 		}
 
-		if err := m.render(data); err != nil {
+		if err := m.render(d); err != nil {
 			m.log.Error("could not render weather data", "module", "weather", "id", m.name, "error", err.Error())
 		}
 
@@ -133,14 +133,11 @@ func (m *Module) run() {
 }
 
 func (m *Module) loadCSS(path string) error {
-	css, err := ioutil.ReadFile(filepath.Join(m.path, path))
+	css, err := os.ReadFile(filepath.Join(m.path, path))
 	if err != nil {
 		return fmt.Errorf("weather: could not read css: %w", err)
 	}
-	if err := m.ui.LoadCSS(string(css)); err != nil {
-		return err
-	}
-	return nil
+	return m.ui.LoadCSS(string(css))
 }
 
 func (m *Module) render(data interface{}) error {
@@ -165,20 +162,25 @@ func (m *Module) request(c http.Client, p string, qry url.Values, v interface{})
 	}
 	u.RawQuery = q.Encode()
 
-	resp, err := c.Get(u.String())
+	req, err := http.NewRequest(http.MethodGet, u.String(), nil)
+	if err != nil {
+		return fmt.Errorf("could create request: %w", err)
+	}
+	resp, err := c.Do(req)
 	if err != nil {
 		return fmt.Errorf("could not parse url: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != 200 {
 		de := dataError{}
-		if err := json.NewDecoder(resp.Body).Decode(&de); err != nil {
+		if err = json.NewDecoder(resp.Body).Decode(&de); err != nil {
 			return fmt.Errorf("could not parse error: %w", err)
 		}
 		return fmt.Errorf("could not fetch data: %s", de.Message)
 	}
-	if err := json.NewDecoder(resp.Body).Decode(v); err != nil {
+
+	if err = json.NewDecoder(resp.Body).Decode(v); err != nil {
 		return fmt.Errorf("could not parse data: %w", err)
 	}
 	return nil
@@ -252,7 +254,7 @@ type weather []struct {
 	IconCode string `json:"icon"`
 }
 
-// ResolveIcon returns the weather icon or the unknown icon.
+// Icon returns the weather icon or the unknown icon.
 func (w weather) Icon() string {
 	if len(w) == 0 {
 		return unknownIcon

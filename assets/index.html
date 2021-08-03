@@ -1,6 +1,6 @@
 <div class="weather">
     <div class="current">
-        <span class="icon wu wu-white {{ if ne .Current.Icon "" }}{{ .Current.Icon }}{{ else }}wu-unknown{{ end }}"></span>
+        <span class="icon wu wu-white {{ if .Current.Icon }}{{ .Current.Icon }}{{ else }}wu-unknown{{ end }}"></span>
         <span class="temp bright light">{{ printf "%02.f" .Current.Main.Temp }}<sup>&deg;</sup></span>
         <span class="info semi-bright light">
             <div>
@@ -24,7 +24,7 @@
         {{- range .Forecast.List}}
         <span>
             <div class="day semi-bright small">{{ .Day }}</div>
-            <div class="icon wu wu-white {{ if ne .Icon "" }}{{ .Icon }}{{ else }}wu-unknown{{ end }}"></div>
+            <div class="icon wu wu-white {{ if .Icon }}{{ .Icon }}{{ else }}wu-unknown{{ end }}"></div>
             <div class="temp-range semi-bright small">
                 {{ printf "%.f" .Temp.Max }}<sup>&deg;</sup> - {{ printf "%.f" .Temp.Min }}<sup>&deg;</sup>
             </div>
