@@ -78,7 +78,7 @@ func New(_ context.Context, cfg *Config, info types.Info, ui types.UI) (io.Close
 	if err = m.loadCSS("assets/style.css"); err != nil {
 		return nil, err
 	}
-	if err = m.render(data{}); err != nil {
+	if err = m.render(nil); err != nil {
 		return nil, err
 	}
 
@@ -140,9 +140,12 @@ func (m *Module) loadCSS(path string) error {
 	return m.ui.LoadCSS(string(css))
 }
 
-func (m *Module) render(data interface{}) error {
+func (m *Module) render(v interface{}) error {
+	if v == nil {
+		v = data{}
+	}
 	var buf bytes.Buffer
-	if err := m.tmpl.Execute(&buf, data); err != nil {
+	if err := m.tmpl.Execute(&buf, v); err != nil {
 		return fmt.Errorf("weather: could not render html: %w", err)
 	}
 	return m.ui.LoadHTML(buf.String())
