@@ -1,34 +1,46 @@
 run:
   tests: false
-  timeout: 5m
+  deadline: 5m
 
 linters-settings:
-  cyclop:
-    max-complexity: 20
-    skip-tests: true
-  funlen:
-    lines: 80
   gofumpt:
     extra-rules: true
 
 linters:
   enable-all: true
   disable:
+    - interfacebloat
+    - sqlclosecheck # not relevant (SQL)
+    - rowserrcheck # not relevant (SQL)
+    - execinquery # not relevant (SQL)
     - interfacer # deprecated
     - scopelint # deprecated
     - maligned # deprecated
     - golint # deprecated
+    - deadcode # deprecated
+    - exhaustivestruct # deprecated
+    - ifshort # deprecated
+    - nosnakecase # deprecated
+    - structcheck # deprecated
+    - varcheck # deprecated
+    - cyclop # duplicate of gocyclo
+    - depguard
     - exhaustive
-    - exhaustivestruct
+    - exhaustruct
     - forcetypeassert
     - funlen
     - gochecknoglobals
     - gochecknoinits
+    - gocognit
+    - gocyclo
     - goerr113
     - gomnd
+    - ireturn
+    - nestif
     - nlreturn
-    - nilerr
-    - noctx
+    - nonamedreturns
+    - tagliatelle
+    - varnamelen
     - wrapcheck
     - wsl
 
@@ -36,7 +48,4 @@ issues:
   exclude-use-default: false
   exclude:
     - 'ST1000: at least one file in a package should have a package comment'
-  exclude-rules:
-    - path: module/client.go
-      linters:
-        - noctx
+    - 'package-comments: should have a package comment'
