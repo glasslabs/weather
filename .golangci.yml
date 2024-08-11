@@ -10,21 +10,10 @@ linters:
   enable-all: true
   disable:
     - interfacebloat
-    - sqlclosecheck # not relevant (SQL)
-    - rowserrcheck # not relevant (SQL)
-    - execinquery # not relevant (SQL)
-    - interfacer # deprecated
-    - scopelint # deprecated
-    - maligned # deprecated
-    - golint # deprecated
-    - deadcode # deprecated
-    - exhaustivestruct # deprecated
-    - ifshort # deprecated
-    - nosnakecase # deprecated
-    - structcheck # deprecated
-    - varcheck # deprecated
+    - execinquery # deprecated
     - cyclop # duplicate of gocyclo
     - depguard
+    - err113
     - exhaustive
     - exhaustruct
     - forcetypeassert
@@ -33,9 +22,9 @@ linters:
     - gochecknoinits
     - gocognit
     - gocyclo
-    - goerr113
     - gomnd
     - ireturn
+    - mnd
     - nestif
     - nlreturn
     - nonamedreturns

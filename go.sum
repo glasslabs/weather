@@ -1,8 +1,8 @@
-github.com/glasslabs/client-go v0.1.0 h1:a2Ob6EMyglz+Jy53diQv62ZCBVA4/BONF3e2APcnlr0=
-github.com/glasslabs/client-go v0.1.0/go.mod h1:CpO4gMLfNrbhZQsNlNjq1KcGUAk35eCWj35YBb2xccw=
+github.com/glasslabs/client-go v0.2.0 h1:n1w7pC3I3t7Lru1yJbmuhIjuPCprefhAF1V2jjvq/Bs=
+github.com/glasslabs/client-go v0.2.0/go.mod h1:IyhCNLlDg7KolU1WRHGXbfTbT0zLvxtrefoQlby+p9U=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
 gopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
-honnef.co/go/js/dom/v2 v2.0.0-20230808055721-96db8f4d5e3b h1:XOEHdukvK2DAtBpN8kQbuj6UIK5dz9DLvqc51o6w4L0=
-honnef.co/go/js/dom/v2 v2.0.0-20230808055721-96db8f4d5e3b/go.mod h1:+JtEcbinwR4znM12aluJ3WjKgvhDPKPQ8hnP4YM+4jI=
+honnef.co/go/js/dom/v2 v2.0.0-20231112215516-51f43a291193 h1:qc3CbLs/1Tb3N7yIKKph/UbUoyI8YQfTF1apIvqX/I8=
+honnef.co/go/js/dom/v2 v2.0.0-20231112215516-51f43a291193/go.mod h1:+JtEcbinwR4znM12aluJ3WjKgvhDPKPQ8hnP4YM+4jI=
