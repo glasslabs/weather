@@ -12,8 +12,8 @@ jobs:
     env:
       GOOS: js
       GOARCH: wasm
-      GO_VERSION: "1.21"
-      GOLANGCI_LINT_VERSION: v1.55.0
+      GO_VERSION: "1.22"
+      GOLANGCI_LINT_VERSION: v1.59.1
 
     steps:
       - name: Install Go
