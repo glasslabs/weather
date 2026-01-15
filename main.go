@@ -150,7 +150,7 @@ func (m *Module) render(d data) error {
 	return nil
 }
 
-func (m *Module) request(p string, qry url.Values, v interface{}) error {
+func (m *Module) request(p string, qry url.Values, v any) error {
 	u, err := url.Parse(api + p)
 	if err != nil {
 		return fmt.Errorf("could not parse url: %w", err)
