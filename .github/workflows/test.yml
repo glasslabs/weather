@@ -10,9 +10,9 @@ jobs:
 
     runs-on: ubuntu-latest
     env:
-      GOOS: js
+      GOOS: wasip1
       GOARCH: wasm
-      GOLANGCI_LINT_VERSION: v2.8.0
+      GOLANGCI_LINT_VERSION: v2.11.4
 
     steps:
       - name: Checkout code

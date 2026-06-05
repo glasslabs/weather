@@ -1,4 +1,4 @@
-GOOS=js
+GOOS=wasip1
 GOARCH=wasm
 
 export GOOS
